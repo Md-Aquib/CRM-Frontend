@@ -18,15 +18,12 @@ function Leads() {
     const [stage6Leads, setStage6Leads] = useState([]);
 
     const { authToken } = useContext(AuthContext);
-    // setLeads(.());
-    // console.log(leads);
 
     useEffect(() => {
         leadsAPI
             .getAllLeads(authToken)
             .then((data) => {
                 setLeads(data.leads);
-                // console.log(data.leads);
             })
             .catch((error) => {
                 console.error("Error fetching leads:", error);
@@ -99,7 +96,6 @@ function Leads() {
         setStage4Leads(stage4LeadsDetails);
         setStage5Leads(stage5LeadsDetails);
         setStage6Leads(stage6LeadsDetails);
-        // console.log(`s1:`, stage1Leads);
     }, [leads]);
 
     // Box
@@ -177,81 +173,6 @@ function Leads() {
                         stageID={6}
                         stage={"Lost"}
                     />
-                    {/* <div className="card rounded-lg shadow-sm">
-                        <div className="card-body">
-                            <div className="title d-flex justify-content-between">
-                                <h5 className="card-title">Follow-Up</h5>
-                                <h5 className="lead-price">&#8377; 0.00</h5>
-                            </div>
-                            <a
-                                className="btn btn-outline-primary"
-                                id="card-create-leads"
-                                href="/leads/create"
-                            >
-                                Create Leads
-                            </a>
-                        </div>
-                    </div> */}
-                    {/* <div className="card rounded-lg shadow-sm">
-                        <div className="card-body">
-                            <div className="title d-flex justify-content-between">
-                                <h5 className="card-title">Visit</h5>
-                                <h5 className="lead-price">&#8377; 0.00</h5>
-                            </div>
-                            <a
-                                className="btn btn-outline-primary"
-                                id="card-create-leads"
-                                href="/leads/create"
-                            >
-                                Create Leads
-                            </a>
-                        </div>
-                    </div>
-                    <div className="card rounded-lg shadow-sm">
-                        <div className="card-body">
-                            <div className="title d-flex justify-content-between">
-                                <h5 className="card-title">Negotiation</h5>
-                                <h5 className="lead-price">&#8377; 0.00</h5>
-                            </div>
-                            <a
-                                className="btn btn-outline-primary"
-                                id="card-create-leads"
-                                href="/leads/create"
-                            >
-                                Create Leads
-                            </a>
-                        </div>
-                    </div>
-                    <div className="card rounded-lg shadow-sm">
-                        <div className="card-body">
-                            <div className="title d-flex justify-content-between">
-                                <h5 className="card-title">Won</h5>
-                                <h5 className="lead-price">&#8377; 0.00</h5>
-                            </div>
-                            <a
-                                className="btn btn-outline-primary"
-                                id="card-create-leads"
-                                href="/leads/create"
-                            >
-                                Create Leads
-                            </a>
-                        </div>
-                    </div>
-                    <div className="card rounded-lg shadow-sm">
-                        <div className="card-body">
-                            <div className="title d-flex justify-content-between">
-                                <h5 className="card-title">Lost</h5>
-                                <h5 className="lead-price">&#8377; 0.00</h5>
-                            </div>
-                            <a
-                                className="btn btn-outline-primary"
-                                id="card-create-leads"
-                                href="/leads/create"
-                            >
-                                Create Leads
-                            </a>
-                        </div>
-                    </div> */}
                 </div>
             </div>
         </div>
