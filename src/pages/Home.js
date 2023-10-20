@@ -32,6 +32,19 @@ function Home() {
     const [banksPercent, setBanksPercent] = useState(0);
     const [othersPercent, setOthersPercent] = useState(0);
 
+    const [top_source, setTop_Source] = useState(null);
+    const [src_email, setSrc_email] = useState([]);
+    const [src_phone, setSrc_phone] = useState([]);
+    const [src_web, setSrc_web] = useState([]);
+    const [src_whatsapp, setSrc_whatsapp] = useState([]);
+    const [src_direct, setSrc_direct] = useState([]);
+
+    const [emailPercent, setemailPercent] = useState(0);
+    const [phonePercent, setphonePercent] = useState(0);
+    const [webPercent, setwebPercent] = useState(0);
+    const [whatsappPercent, setwhatsappPercent] = useState(0);
+    const [directPercent, setdirectPercent] = useState(0);
+
     useEffect(() => {
         setSchool([]);
 
@@ -100,7 +113,7 @@ function Home() {
 
     // End Daily Visits
 
-    // Top Leads
+    // Top Leads and Top Source
 
     const [top5Leads, setTop5Leads] = useState([]);
 
@@ -108,6 +121,33 @@ function Home() {
         leadsAPI
             .getAllLeads(authToken)
             .then((data) => {
+                // Top-Source
+                setTop_Source(data.leads.length);
+
+                const email = data.leads.filter(
+                    (src) => src.source === "EMAIL"
+                );
+                setSrc_email(email);
+
+                const phone = data.leads.filter(
+                    (src) => src.source === "PHONE"
+                );
+                setSrc_phone(phone);
+
+                const web = data.leads.filter((src) => src.source === "WEB");
+                setSrc_web(web);
+
+                const whatsapp = data.leads.filter(
+                    (src) => src.source === "WHATSAPP"
+                );
+                setSrc_whatsapp(whatsapp);
+
+                const direct = data.leads.filter(
+                    (src) => src.source === "DIRECT"
+                );
+                setSrc_direct(direct);
+
+                // Top 5 Leads
                 const sortedLeads = data.leads.sort(
                     (leadA, leadB) => leadB.budget - leadA.budget
                 );
@@ -117,6 +157,21 @@ function Home() {
                 console.error("Error fetching leads:", error);
             });
     }, [authToken]);
+
+    useEffect(() => {
+        // Calculate the Percent when source changes
+        if (top_source > 0) {
+            setemailPercent(((src_email.length / top_source) * 100).toFixed(1));
+            setphonePercent(((src_phone.length / top_source) * 100).toFixed(1));
+            setwebPercent(((src_web.length / top_source) * 100).toFixed(1));
+            setwhatsappPercent(
+                ((src_whatsapp.length / top_source) * 100).toFixed(1)
+            );
+            setdirectPercent(
+                ((src_direct.length / top_source) * 100).toFixed(1)
+            );
+        }
+    }, [school, dailyVisit]);
 
     // End Top Leads
 
@@ -217,6 +272,8 @@ function Home() {
                                 </div>
                             </div>
                         </div>
+                        {/* Negotiation */}
+
                         <div className="col-lg-4 col-md-4 col-6">
                             <div className="card mb-3">
                                 <div className="card-header">Negotiations</div>
@@ -264,6 +321,8 @@ function Home() {
                                 </div>
                             </div>
                         </div>
+                        {/* Daily Visits */}
+
                         <div className="col-lg-4 col-md-4 col-6">
                             <div className="card mb-3">
                                 <div className="card-header">Daily Visits</div>
@@ -400,6 +459,105 @@ function Home() {
                                             }}
                                         >
                                             {othersPercent}%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Top Source */}
+
+                        <div className="col-lg-4 col-md-4 col-6">
+                            <div className="card mb-3">
+                                <div className="card-header">Top Source</div>
+                                <div className="card-body">
+                                    <h6>Email</h6>
+                                    <div
+                                        className="card-text progress"
+                                        role="progressbar"
+                                        aria-label="Example with label"
+                                        aria-valuenow={emailPercent}
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                    >
+                                        <div
+                                            className="progress-bar"
+                                            style={{
+                                                width: `${emailPercent}%`,
+                                            }}
+                                        >
+                                            {emailPercent}%
+                                        </div>
+                                    </div>
+                                    <h6 className="visit_location">Phone</h6>
+                                    <div
+                                        className="card-text progress"
+                                        role="progressbar"
+                                        aria-label="Example with label"
+                                        aria-valuenow={phonePercent}
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                    >
+                                        <div
+                                            className="progress-bar"
+                                            style={{
+                                                width: `${phonePercent}%`,
+                                            }}
+                                        >
+                                            {phonePercent}%
+                                        </div>
+                                    </div>
+                                    <h6 className="visit_location">Web</h6>
+                                    <div
+                                        className="card-text progress"
+                                        role="progressbar"
+                                        aria-label="Example with label"
+                                        aria-valuenow={webPercent}
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                    >
+                                        <div
+                                            className="progress-bar"
+                                            style={{
+                                                width: `${webPercent}%`,
+                                            }}
+                                        >
+                                            {webPercent}%
+                                        </div>
+                                    </div>
+                                    <h6 className="visit_location">Whatsapp</h6>
+                                    <div
+                                        className="card-text progress"
+                                        role="progressbar"
+                                        aria-label="Example with label"
+                                        aria-valuenow={whatsappPercent}
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                    >
+                                        <div
+                                            className="progress-bar"
+                                            style={{
+                                                width: `${whatsappPercent}%`,
+                                            }}
+                                        >
+                                            {whatsappPercent}%
+                                        </div>
+                                    </div>
+                                    <h6 className="visit_location">Direct</h6>
+                                    <div
+                                        className="card-text progress"
+                                        role="progressbar"
+                                        aria-label="Example with label"
+                                        aria-valuenow={directPercent}
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                    >
+                                        <div
+                                            className="progress-bar"
+                                            style={{
+                                                width: `${directPercent}%`,
+                                            }}
+                                        >
+                                            {directPercent}%
                                         </div>
                                     </div>
                                 </div>
