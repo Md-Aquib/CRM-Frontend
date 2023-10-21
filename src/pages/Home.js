@@ -171,7 +171,7 @@ function Home() {
                 ((src_direct.length / top_source) * 100).toFixed(1)
             );
         }
-    }, [school, dailyVisit]);
+    }, [top_source]);
 
     // End Top Leads
 
@@ -230,7 +230,7 @@ function Home() {
 
                 <div className="dashboard">
                     <div className="row">
-                        <div className="col-lg-4 col-md-4 col-6">
+                        <div className="col-lg-4 col-md-6 col-12">
                             <div className="card mb-3">
                                 <div className="card-header">Top Leads</div>
                                 <div className="card-body top-leads-body">
@@ -274,7 +274,7 @@ function Home() {
                         </div>
                         {/* Negotiation */}
 
-                        <div className="col-lg-4 col-md-4 col-6">
+                        <div className="col-lg-4 col-md-6 col-12">
                             <div className="card mb-3">
                                 <div className="card-header">Negotiations</div>
                                 <div className="card-body">
@@ -323,7 +323,7 @@ function Home() {
                         </div>
                         {/* Daily Visits */}
 
-                        <div className="col-lg-4 col-md-4 col-6">
+                        <div className="col-lg-4 col-md-6 col-12">
                             <div className="card mb-3">
                                 <div className="card-header">Daily Visits</div>
                                 <div className="card-body">
@@ -466,7 +466,7 @@ function Home() {
                         </div>
                         {/* Top Source */}
 
-                        <div className="col-lg-4 col-md-4 col-6">
+                        <div className="col-lg-4 col-md-6 col-12">
                             <div className="card mb-3">
                                 <div className="card-header">Top Source</div>
                                 <div className="card-body">

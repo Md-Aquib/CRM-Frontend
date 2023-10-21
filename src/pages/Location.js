@@ -21,7 +21,7 @@ function Location() {
             .catch((error) => {
                 console.error("Error fetching Sales Person:", error);
             });
-    }, []);
+    }, [authToken]);
     return (
         <div>
             <Header />

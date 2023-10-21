@@ -1,0 +1,34 @@
+.report {
+    padding: 80px 5px 10px 61px;
+}
+
+.report_board .card{
+    border-radius:3px;
+    margin-top:20px;
+}
+
+.report_board .card-header{
+    background-color:#fff;
+    font-weight:600;
+    font-size:18px;
+    padding-top:15px;
+    padding-bottom:15px;
+}
+
+.report_text .color-label{
+    display: flex;
+    justify-content: space-between;
+}
+
+.report_text .color-box{
+    height:10px;
+    width:15px;
+}
+
+.report_text #label_color_rev{
+    background-color:#36A2EB;
+}
+
+.report_text #label_color_coll{
+    background-color:#FF6384;
+}

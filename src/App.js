@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from "react";
+import { Navigate } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Publishers from "./pages/Publishers";
@@ -14,6 +15,7 @@ import CreateBook from "./pages/create/createBook";
 import ViewPublisher from "./pages/view/ViewPublisher";
 import ViewSalesperson from "./pages/view/ViewSalesperson";
 import ViewAccount from "./pages/view/viewAccount";
+import Reports from "./pages/Reports";
 import AuthContext from "./context/AuthContext";
 import PrivateRoute from "./context/PrivateRoute";
 import "./App.css";
@@ -35,7 +37,9 @@ import "./styles/series.css";
 import "./styles/sample.css";
 import "./styles/utilities.css";
 import "./styles/location.css";
-import Attendance from "./pages/Attendance";
+import "./styles/report.css";
+import "./styles/error.css";
+import ViewAttendance from "./pages/view/viewAttendance";
 import CreateAttendance from "./pages/create/CreateAttendance";
 import Expense from "./pages/Expense";
 import CreateExpense from "./pages/create/CreateExpense";
@@ -51,6 +55,8 @@ import CreateSample from "./pages/create/CreateSample";
 import ViewLead from "./pages/Leads/ViewLead";
 import ViewLocation from "./pages/view/ViewLocation";
 import locationAPI from "./api/locationAPI";
+import Error403 from "./pages/Error403";
+import Attendance from "./pages/Attendance";
 
 function App() {
     let {
@@ -103,111 +109,374 @@ function App() {
                     setMessage("Geolocation is not available in your browser.");
                     logoutUser();
                 }
-            }, 1 * 60 * 1000);
+            }, 5 * 60 * 1000);
         }
     }, []);
+
+    // Custom functions to check user roles
+    const isAdmin = () => {
+        // Check if the user is an admin
+        return User_type === "admin";
+    };
+
+    const isPublisher = () => {
+        // Check if the user is a publisher
+        return User_type === "publisher";
+    };
+
+    const isSalesperson = () => {
+        // Check if the user is a salesperson
+        return User_type === "salesperson";
+    };
+
+    const isAdmin_Publisher = () => {
+        // Check if the user is an admin or a publisher
+        return User_type === "admin" || User_type === "publisher";
+    };
+
+    const forAll = () => {
+        // Check if the user is an admin or a publisher or salesperson.
+        return (
+            User_type === "admin" ||
+            User_type === "publisher" ||
+            User_type === "salesperson"
+        );
+    };
 
     return (
         <Routes>
             <Route exact path="/login" element={<Login />} />
             <Route element={<PrivateRoute />}>
-                <Route exact path="/" element={<Home />} />
-                <Route exact path="/manage-account" element={<ViewAccount />} />
+                {/* Home */}
+                <Route
+                    exact
+                    path="/"
+                    element={forAll() ? <Home /> : <Navigate to="/403" />}
+                />
+
+                {/* Manage Account */}
+                <Route
+                    exact
+                    path="/manage-account"
+                    element={
+                        forAll() ? <ViewAccount /> : <Navigate to="/403" />
+                    }
+                />
 
                 {/* Publisher Routes */}
-                <Route exact path="/publishers" element={<Publishers />} />
+                <Route
+                    exact
+                    path="/publishers"
+                    element={
+                        isAdmin() ? <Publishers /> : <Navigate to="/403" />
+                    }
+                />
                 <Route
                     exact
                     path="/create/publisher"
-                    element={<CreatePublisher />}
+                    element={
+                        isAdmin() ? <CreatePublisher /> : <Navigate to="/403" />
+                    }
                 />
                 <Route
                     exact
                     path="/publisher/view/:id"
-                    element={<ViewPublisher />}
+                    element={
+                        isAdmin() ? <ViewPublisher /> : <Navigate to="/403" />
+                    }
                 />
+
                 {/* Salesperson Routes */}
                 <Route exact path="/salesperson" element={<Salesperson />} />
                 <Route
                     exact
                     path="/create/salesperson"
-                    element={<CreateSalesperson />}
+                    element={
+                        isAdmin_Publisher() ? (
+                            <CreateSalesperson />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
                 />
-                <Route exact path="/attendance" element={<Attendance />} />
+                <Route
+                    exact
+                    path="/attendance"
+                    element={forAll() ? <Attendance /> : <Navigate to="/403" />}
+                />
+                <Route
+                    exact
+                    path="/attendance/:id"
+                    element={
+                        forAll() ? <ViewAttendance /> : <Navigate to="/403" />
+                    }
+                />
                 <Route
                     exact
                     path="/create/attendance"
-                    element={<CreateAttendance />}
+                    element={
+                        isSalesperson() ? (
+                            <CreateAttendance />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
                 />
                 <Route
                     exact
                     path="/salesperson/view/:id"
-                    element={<ViewSalesperson />}
+                    element={
+                        isAdmin_Publisher() ? (
+                            <ViewSalesperson />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
                 />
+
                 {/* Books Routes */}
-                <Route exact path="/books" element={<Books />} />
-                <Route exact path="/create/book" element={<CreateBook />} />
+                <Route
+                    exact
+                    path="/books"
+                    element={forAll() ? <Books /> : <Navigate to="/403" />}
+                />
+
+                <Route
+                    exact
+                    path="/create/book"
+                    element={
+                        isAdmin_Publisher() ? (
+                            <CreateBook />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
+                />
+
                 <Route
                     exact
                     path="/update-book/:bookID"
-                    element={<CreateBook />}
+                    element={
+                        isAdmin_Publisher() ? (
+                            <CreateBook />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
                 />
+
                 {/* Leads Routes */}
-                <Route exact path="/leads" element={<Leads />} />
-                <Route path="/leads/create/:stageID" element={<CreateLead />} />
-                <Route path="/leads/view/:leadID" element={<ViewLead />} />
+                <Route
+                    exact
+                    path="/leads"
+                    element={forAll() ? <Leads /> : <Navigate to="/403" />}
+                />
+
+                <Route
+                    path="/leads/create/:stageID"
+                    element={forAll() ? <CreateLead /> : <Navigate to="/403" />}
+                />
+
+                <Route
+                    path="/leads/view/:leadID"
+                    element={forAll() ? <ViewLead /> : <Navigate to="/403" />}
+                />
+
                 {/* Travelling Expense */}
-                <Route exact path="/travelling-expense" element={<Expense />} />
+                <Route
+                    exact
+                    path="/travelling-expense"
+                    element={forAll() ? <Expense /> : <Navigate to="/403" />}
+                />
+
                 <Route
                     exact
                     path="/create/travelling-expense"
-                    element={<CreateExpense />}
+                    element={
+                        forAll() ? <CreateExpense /> : <Navigate to="/403" />
+                    }
                 />
+
                 {/* Travelling Claim */}
-                <Route exact path="/travelling-claim" element={<Claim />} />
+
+                <Route
+                    exact
+                    path="/travelling-claim"
+                    element={forAll() ? <Claim /> : <Navigate to="/403" />}
+                />
+
                 <Route
                     exact
                     path="/create/travelling-claim"
-                    element={<CreateClaim />}
+                    element={
+                        forAll() ? <CreateClaim /> : <Navigate to="/403" />
+                    }
                 />
+
                 {/* Boards */}
-                <Route exact path="/boards" element={<Boards />} />
-                <Route exact path="/create/board" element={<CreateBoards />} />
+
+                <Route
+                    exact
+                    path="/boards"
+                    element={
+                        isAdmin_Publisher() ? (
+                            <Boards />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
+                />
+
+                <Route
+                    exact
+                    path="/create/board"
+                    element={
+                        isAdmin_Publisher() ? (
+                            <CreateBoards />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
+                />
+
                 <Route
                     exact
                     path="/update-board/:boardID"
-                    element={<CreateBoards />}
+                    element={
+                        isAdmin_Publisher() ? (
+                            <CreateBoards />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
                 />
+
                 {/* Subject */}
-                <Route exact path="/subjects" element={<Subject />} />
+                <Route
+                    exact
+                    path="/subjects"
+                    element={
+                        isAdmin_Publisher() ? (
+                            <Subject />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
+                />
                 <Route
                     exact
                     path="/create/subject"
-                    element={<CreateSubject />}
+                    element={
+                        isAdmin_Publisher() ? (
+                            <CreateSubject />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
                 />
                 <Route
                     exact
                     path="/update-subject/:subjectID"
-                    element={<CreateSubject />}
+                    element={
+                        isAdmin_Publisher() ? (
+                            <CreateSubject />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
                 />
+
                 {/* Series */}
-                <Route exact path="/series" element={<Series />} />
-                <Route exact path="/create/series" element={<CreateSeries />} />
+                <Route
+                    exact
+                    path="/series"
+                    element={
+                        isAdmin_Publisher() ? (
+                            <Series />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
+                />
+
+                <Route
+                    exact
+                    path="/create/series"
+                    element={
+                        isAdmin_Publisher() ? (
+                            <CreateSeries />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
+                />
+
                 <Route
                     exact
                     path="/update-series/:seriesID"
-                    element={<CreateSeries />}
+                    element={
+                        isAdmin_Publisher() ? (
+                            <CreateSeries />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
                 />
+
                 {/* Sample */}
-                {/* <Route exact path="/sample" element={<Sample />} /> */}
-                <Route exact path="/create/sample" element={<CreateSample />} />
+
+                <Route
+                    exact
+                    path="/create/sample"
+                    element={
+                        isAdmin_Publisher() ? (
+                            <CreateSample />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
+                />
+
                 {/* Location */}
-                <Route exact path="/track" element={<Location />} />
+                <Route
+                    exact
+                    path="/track"
+                    element={
+                        isAdmin_Publisher() ? (
+                            <Location />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
+                />
+
                 <Route
                     exact
                     path="/view/location/:id"
-                    element={<ViewLocation />}
+                    element={
+                        isAdmin_Publisher() ? (
+                            <ViewLocation />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
                 />
+
+                {/* Reports */}
+                <Route
+                    exact
+                    path="/reports"
+                    element={
+                        isAdmin_Publisher() ? (
+                            <Reports />
+                        ) : (
+                            <Navigate to="/403" />
+                        )
+                    }
+                />
+
+                {/* Errors */}
+                <Route exact path="/403" element={<Error403 />} />
             </Route>
         </Routes>
     );

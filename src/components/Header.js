@@ -20,10 +20,10 @@ import {
 import { Link } from "react-router-dom";
 
 function Header() {
-    let { logoutUser, Name } = useContext(AuthContext);
+    let { logoutUser, Name, User_type, ID } = useContext(AuthContext);
     return (
         <div className="header">
-            <nav className="navbar">
+            <nav className="navbar fixed-top">
                 <div className="container-fluid d-flex">
                     <Link
                         className="navbar-brand"
@@ -44,7 +44,7 @@ function Header() {
                             </button>
                             <div className="dropdown-menu-1 justify-content-center">
                                 <div className="row">
-                                    <div className="col-4 cell">
+                                    <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
                                         <Link
                                             to="/leads/create/1"
                                             className="btn head-btn"
@@ -58,51 +58,64 @@ function Header() {
                                             </h6>
                                         </Link>
                                     </div>
-                                    <div className="col-4 cell">
+                                    {(User_type === "admin" ||
+                                        User_type === "publisher") && (
+                                        <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
+                                            <Link
+                                                to="/create/salesperson"
+                                                className="btn head-btn"
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faUsers}
+                                                    className="head-icon"
+                                                />
+                                                <h6 className="text-muted">
+                                                    Person
+                                                </h6>
+                                            </Link>
+                                        </div>
+                                    )}
+                                    {(User_type === "admin" ||
+                                        User_type === "publisher") && (
+                                        <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
+                                            <Link
+                                                to="/create/book"
+                                                className="btn head-btn"
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faBook}
+                                                    className="head-icon"
+                                                />
+                                                <h6 className="text-muted">
+                                                    Books
+                                                </h6>
+                                            </Link>
+                                        </div>
+                                    )}
+                                    {User_type === "admin" && (
+                                        <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
+                                            <Link
+                                                to="/create/publisher"
+                                                className="btn head-btn"
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faUserTie}
+                                                    className="head-icon"
+                                                />
+                                                <h6 className="text-muted">
+                                                    Publisher
+                                                </h6>
+                                            </Link>
+                                        </div>
+                                    )}
+
+                                    <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
                                         <Link
-                                            to="/create/salesperson"
-                                            className="btn head-btn"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faUsers}
-                                                className="head-icon"
-                                            />
-                                            <h6 className="text-muted">
-                                                Person
-                                            </h6>
-                                        </Link>
-                                    </div>
-                                    <div className="col-4 cell">
-                                        <Link
-                                            to="/create/book"
-                                            className="btn head-btn"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faBook}
-                                                className="head-icon"
-                                            />
-                                            <h6 className="text-muted">
-                                                Books
-                                            </h6>
-                                        </Link>
-                                    </div>
-                                    <div className="col-4 cell">
-                                        <Link
-                                            to="/create/publisher"
-                                            className="btn head-btn"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faUserTie}
-                                                className="head-icon"
-                                            />
-                                            <h6 className="text-muted">
-                                                Publisher
-                                            </h6>
-                                        </Link>
-                                    </div>
-                                    <div className="col-4 cell">
-                                        <Link
-                                            to="/attendance"
+                                            to={
+                                                User_type === "salesperson"
+                                                    ? `/attendance/${ID}`
+                                                    : "/attendance"
+                                            }
                                             className="btn head-btn"
                                         >
                                             <FontAwesomeIcon
@@ -114,21 +127,25 @@ function Header() {
                                             </h6>
                                         </Link>
                                     </div>
-                                    <div className="col-4 cell">
-                                        <Link
-                                            to="/create/sample"
-                                            className="btn head-btn"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faBookBookmark}
-                                                className="head-icon"
-                                            />
-                                            <h6 className="text-muted">
-                                                Sample
-                                            </h6>
-                                        </Link>
-                                    </div>
-                                    <div className="col-4 cell">
+
+                                    {(User_type === "admin" ||
+                                        User_type === "publisher") && (
+                                        <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
+                                            <Link
+                                                to="/create/sample"
+                                                className="btn head-btn"
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faBookBookmark}
+                                                    className="head-icon"
+                                                />
+                                                <h6 className="text-muted">
+                                                    Sample
+                                                </h6>
+                                            </Link>
+                                        </div>
+                                    )}
+                                    <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
                                         <Link
                                             to="/travelling-expense"
                                             className="btn head-btn"
@@ -142,7 +159,7 @@ function Header() {
                                             </h6>
                                         </Link>
                                     </div>
-                                    <div className="col-4 cell">
+                                    <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
                                         <Link
                                             to="/travelling-claim"
                                             className="btn head-btn"
@@ -156,48 +173,57 @@ function Header() {
                                             </h6>
                                         </Link>
                                     </div>
-                                    <div className="col-4 cell">
-                                        <Link
-                                            to="/boards"
-                                            className="btn head-btn"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faGraduationCap}
-                                                className="head-icon"
-                                            />
-                                            <h6 className="text-muted">
-                                                Boards
-                                            </h6>
-                                        </Link>
-                                    </div>
-                                    <div className="col-4 cell">
-                                        <Link
-                                            to="/series"
-                                            className="btn head-btn"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faBookOpen}
-                                                className="head-icon"
-                                            />
-                                            <h6 className="text-muted">
-                                                Series
-                                            </h6>
-                                        </Link>
-                                    </div>
-                                    <div className="col-4 cell">
-                                        <Link
-                                            to="/subjects"
-                                            className="btn head-btn"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faBookAtlas}
-                                                className="head-icon"
-                                            />
-                                            <h6 className="text-muted">
-                                                Subject
-                                            </h6>
-                                        </Link>
-                                    </div>
+                                    {(User_type === "admin" ||
+                                        User_type === "publisher") && (
+                                        <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
+                                            <Link
+                                                to="/boards"
+                                                className="btn head-btn"
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faGraduationCap}
+                                                    className="head-icon"
+                                                />
+                                                <h6 className="text-muted">
+                                                    Boards
+                                                </h6>
+                                            </Link>
+                                        </div>
+                                    )}
+                                    {(User_type === "admin" ||
+                                        User_type === "publisher") && (
+                                        <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
+                                            <Link
+                                                to="/series"
+                                                className="btn head-btn"
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faBookOpen}
+                                                    className="head-icon"
+                                                />
+                                                <h6 className="text-muted">
+                                                    Series
+                                                </h6>
+                                            </Link>
+                                        </div>
+                                    )}
+                                    {(User_type === "admin" ||
+                                        User_type === "publisher") && (
+                                        <div className="col-4 cell d-flex flex-column align-items-center justify-content-center">
+                                            <Link
+                                                to="/subjects"
+                                                className="btn head-btn"
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faBookAtlas}
+                                                    className="head-icon"
+                                                />
+                                                <h6 className="text-muted">
+                                                    Subject
+                                                </h6>
+                                            </Link>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

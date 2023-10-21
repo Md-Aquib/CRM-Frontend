@@ -1,5 +1,5 @@
 .home{
-    padding: 20px 5px 10px 61px;
+    padding: 80px 5px 10px 61px;
 }
 
 .home .header h5{
@@ -16,7 +16,6 @@
 
 .home .dashboard .card{
     border-radius:3px;
-    height:500px;
 }
 
 .home .dashboard .card-header{
@@ -63,4 +62,10 @@
 
 .home .dashboard #top-leads {
     margin-top:11px;
+}
+
+@media (max-width: 540px){
+    .home{
+        padding: 140px 5px 10px 61px;
+    }
 }
